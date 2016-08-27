@@ -122,10 +122,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\DemoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ServersViewModel.cs" />
+    <Compile Include="Models\MimeTypes.cs" />
     <Compile Include="Models\ToolbarViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -139,24 +141,18 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Query\QueryController.js" />
-    <Content Include="Query\QueryModel.js" />
-    <Content Include="Query\QueryView.js" />
-    <Content Include="Query\RetrieveService.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="LESS\bootswatch-flatly.less" />
     <Content Include="LESS\flatly-variables.less" />
+    <None Include="Properties\PublishProfiles\dicomwebdemo-dev - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\DICOMwebDemo.pubxml" />
-    <Content Include="Query\QueryController.js.map" />
-    <Content Include="Query\QueryModel.js.map" />
-    <Content Include="Query\QueryView.js.map" />
-    <Content Include="Query\RetrieveService.js.map" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\DICOMwebJS.js" />
     <Content Include="Scripts\DICOMwebJS.Proxies.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery-2.1.4.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.4.js" />
+    <Content Include="Scripts\jquery-2.1.4.min.js" />
+    <Content Include="Scripts\jquery-2.1.4.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.json-viewer.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -166,8 +162,11 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\typings\libs\html.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -178,15 +177,17 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\_AlertDlg.cshtml" />
-    <Content Include="Views\Home\_InstanceItem.cshtml" />
-    <Content Include="Views\Home\_QueryFieldsView.cshtml" />
-    <Content Include="Views\Home\_SeriesItem.cshtml" />
-    <Content Include="Views\Home\_StoreView.cshtml" />
-    <Content Include="Views\Home\_StudyItem.cshtml" />
-    <Content Include="Views\Home\_StudyView.cshtml" />
-    <Content Include="Views\Home\_Toolbar.cshtml" />
+    <Content Include="Views\Demo\Index.cshtml" />
+    <Content Include="Views\Demo\_AlertDlg.cshtml" />
+    <Content Include="Views\Demo\_InstanceItem.cshtml" />
+    <Content Include="Views\Demo\_QueryFieldsView.cshtml" />
+    <Content Include="Views\Demo\_SeriesItem.cshtml" />
+    <Content Include="Views\Demo\_StoreView.cshtml" />
+    <Content Include="Views\Demo\_StudyItem.cshtml" />
+    <Content Include="Views\Demo\_StudyView.cshtml" />
+    <Content Include="Views\Demo\_Toolbar.cshtml" />
+    <Content Include="Views\Shared\_Scripts.cshtml" />
+    <Content Include="Views\Demo\_ItemDetailsToolbar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -197,7 +198,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="App.ts" />
@@ -205,9 +205,18 @@
     <TypeScriptCompile Include="Query\QueryModel.ts" />
     <TypeScriptCompile Include="Query\QueryView.ts" />
     <TypeScriptCompile Include="Query\RetrieveService.ts" />
+    <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\DICOMwebJS\DICOMwebJS.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\DICOMwebJS\DICOMwebJS.Proxies.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\libs\ace.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\libs\html.ts" />
+    <TypeScriptCompile Include="Types\CodeRenderer.ts" />
+    <TypeScriptCompile Include="Types\ILiteEvent.ts" />
+    <TypeScriptCompile Include="Types\ModelDialog.ts" />
+    <TypeScriptCompile Include="Types\RsFramesEventArgs.ts" />
+    <TypeScriptCompile Include="Types\RsInstanceEventArgs.ts" />
+    <TypeScriptCompile Include="Types\WadoUriEventArgs.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -217,6 +226,37 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind>
+    </TypeScriptModuleKind>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile>cloudPacs.App.js</TypeScriptOutFile>
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind>None</TypeScriptModuleKind>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile>cloudPacs.App.js</TypeScriptOutFile>
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />

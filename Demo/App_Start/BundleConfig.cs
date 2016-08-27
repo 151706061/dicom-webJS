@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace Demo
+namespace CloudPacs.Demo
 {
     public class BundleConfig
     {
@@ -26,13 +26,8 @@ namespace Demo
             bundles.Add(new ScriptBundle("~/bundles/dicomweb").Include(
                         "~/Scripts/DICOMweb*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/app").Include(
-                        "~/Query/RetrieveService.js",
-                        "~/Query/QueryModel.js",
-                        "~/Query/QueryView.js",
-                        "~/Query/QueryController.js",
-                        "~/app.js",
-                        "~/Scripts/jquery.json-viewer.js"));
+             bundles.Add(new ScriptBundle("~/bundles/app")
+            .Include( "~/cloudPacs.App.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",

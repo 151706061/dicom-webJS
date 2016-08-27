@@ -7,9 +7,13 @@ class QueryModel
    public SeriesChangedEvent: () => any = null;
    public InstancesChangedEvent: () =>  any = null;
 
-   public SelectedStudyChangedEvent: () => any = null;
-   public SelectedSeriesChangedEvent: () => any = null;
-   public SelectedInstancesChangedEvent: () => any = null;
+   private _onSelectedStudyChanged = new LiteEvent();
+   private _onSelectedSeriesChanged = new LiteEvent();
+   private _onSelectedInstanceChanged = new LiteEvent();
+
+   public get SelectedStudyChangedEvent ( ) { return this._onSelectedStudyChanged ; } 
+   public get SelectedSeriesChangedEvent() { return this._onSelectedSeriesChanged; }
+   public get SelectedInstanceChangedEvent() { return this._onSelectedInstanceChanged; }
 
 
    private _studyQueryParams: StudyParams = new StudyParams(new JsonDicomDatasetService());
@@ -40,7 +44,8 @@ class QueryModel
       return this._studies;
    }
    public set Studies(value: StudyParams[]) {
-      if (value != this._studies) {
+      if (value != this._studies) 
+      {
          this._studies = value;
          this.onStudiesChanged();
       }
@@ -50,7 +55,8 @@ class QueryModel
       return this._series;
    }
    public set Series(value: SeriesParams[]) {
-      if (value != this._studies) {
+      if (value != this._studies)
+      {
          this._series = value;
          this.onSeriesChanged();
       }
@@ -74,7 +80,8 @@ class QueryModel
       return this._selectedStudyIndex;
    }
    public set SelectedStudyIndex(value: number) {
-      if (this._selectedStudyIndex != value) {
+      //if (this._selectedStudyIndex != value) 
+      {
          if (this._studies.length <= value || value < this.__NOT_SELECTED)
          {
             throw new RangeError();
@@ -90,7 +97,8 @@ class QueryModel
       return this._selectedSeriesIndex;
    }
    public set SelectedSeriesIndex(value: number) {
-      if (this._selectedSeriesIndex != value) {
+      //if (this._selectedSeriesIndex != value)
+      {
           if (this._series.length <= value || value < this.__NOT_SELECTED) {
              throw new RangeError();
          }
@@ -105,7 +113,8 @@ class QueryModel
       return this._selectedInstancesIndex;
    }
    public set SelectedInstanceIndex(value: number) {
-      if (this._selectedInstancesIndex != value) {
+      //if (this._selectedInstancesIndex != value) 
+      {
           if (this._instances.length <= value || value < this.__NOT_SELECTED) {
              throw new RangeError();
          }
@@ -152,22 +161,15 @@ class QueryModel
 
    protected onSelectedStudyChanged()
    {
-      if (this.SelectedStudyChangedEvent)
-      {
-         this.SelectedStudyChangedEvent();
-      }
+      this._onSelectedStudyChanged.trigger();
    }
 
    protected onSelectedSeriesChanged() {
-      if (this.SelectedSeriesChangedEvent) {
-         this.SelectedSeriesChangedEvent();
-      }
+      this._onSelectedSeriesChanged.trigger();
    }
 
    protected onSelectedInstanceChanged() {
-      if (this.SelectedInstancesChangedEvent) {
-         this.SelectedInstancesChangedEvent();
-      }
+      this._onSelectedInstanceChanged.trigger();
    }
 
    protected onStudiesChanged() {

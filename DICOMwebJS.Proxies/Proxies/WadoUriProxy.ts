@@ -2,6 +2,20 @@
 {
     private _xhr: XMLHttpRequest;
     private static _QueryParamsFormatted: string = "?RequestType=wado&studyUID={0}&seriesUID={1}&objectUID={2}"
+    private _baseUrl: string;
+
+    constructor(baseUrl: string)
+    {
+       this._baseUrl = baseUrl;
+    }
+
+    public get BaseUrl() {
+       return this._baseUrl;
+    }
+    public set BaseUrl(value: string)
+    {
+       this._baseUrl = value;
+    }
 
     //returns the DICOM DS 
     getDicomInstance(instanceData: CommonDicomInstanceParams, anonymize: boolean, imageParams: WadoImageParams, successCallback: (buffer: any) => void, failureCallback: (error: ErrorEvent) => void) { 
@@ -21,12 +35,13 @@
    }
 
    getObjectInstance
-       (instanceData: CommonDicomInstanceParams,
-           mimeType: string,
-           imageParams: WadoImageParams,
-           successCallback: (buffer: any) => void,
-           failureCallback: (error: Event) => void
-       )
+   (
+      instanceData: CommonDicomInstanceParams,
+      mimeType: string,
+      imageParams: WadoImageParams,
+      successCallback: (buffer: any) => void,
+      failureCallback: (error: Event) => void
+   )
    {
        var url = this.createUrl(instanceData, mimeType, imageParams);
        var xhr = new XMLHttpRequest();
@@ -48,7 +63,7 @@
    } 
 
    private createUrl(instanceData: CommonDicomInstanceParams,mimeType: string,imageParams: WadoImageParams): string {
-      var url = DICOMwebJS.ServerConfiguration.getWadoUriUrl();
+      var url = this.BaseUrl;
 
        url += WadoUriProxy._QueryParamsFormatted.format(instanceData.studyUID, instanceData.seriesUID, instanceData.instanceUID);
 
@@ -56,6 +71,12 @@
        {
            url += "&contentType=" + mimeType;
        }
+
+       if (imageParams.frameNumber )
+       {
+          url += "&frameNumber=" + imageParams.frameNumber;
+       }
+
        //TODO: implement all other parameters....
        
        return url;
@@ -74,7 +95,7 @@ class WadoImageParams
 
    //int? Rows    { get; set; }
    //int? Columns { get; set; }
-   //int? FrameNumber  { get; set; }
+   frameNumber: string;
    //int? ImageQuality { get; set; }
 
    //string Region                { get; set; }
